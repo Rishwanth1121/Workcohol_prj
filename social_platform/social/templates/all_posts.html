@@ -1,0 +1,15 @@
+{% extends 'base.html' %}
+
+{% block content %}
+<h2>All Posts</h2>
+{% for post in posts %}
+  <div class="post">
+    <p><strong>{{ post.user.username }}</strong>: {{ post.content }}</p>
+    {% if post.image %}
+      <img src="{{ post.image.url }}" width="300" />
+    {% endif %}
+    <p><small>{{ post.created_at }}</small></p>
+  </div>
+{% endfor %}
+<a href="{% url 'home' %}">← Back to Home</a>
+{% endblock %}

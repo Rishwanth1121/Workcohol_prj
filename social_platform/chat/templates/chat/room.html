@@ -1,0 +1,134 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Chat Room</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            margin: 0;
+            padding: 0;
+            height: 100vh;
+            display: flex;
+            flex-direction: column;
+        }
+
+        h2 {
+            padding: 10px;
+            background-color: #075E54;
+            color: white;
+            margin: 0;
+        }
+
+        #messages {
+            list-style-type: none;
+            padding: 10px;
+            margin: 0;
+            flex: 1;
+            overflow-y: auto;
+            background-color: #e5ddd5;
+        }
+
+        .message {
+            padding: 8px 12px;
+            margin: 5px 10px;
+            border-radius: 10px;
+            max-width: 60%;
+            clear: both;
+            word-wrap: break-word;
+        }
+
+        .me {
+            background-color: #dcf8c6;
+            float: right;
+            text-align: right;
+        }
+
+        .other {
+            background-color: #ffffff;
+            float: left;
+            text-align: left;
+        }
+
+        .input-container {
+            display: flex;
+            padding: 10px;
+            border-top: 1px solid #ccc;
+            background-color: #f5f5f5;
+        }
+
+        #messageInput {
+            flex: 1;
+            padding: 10px;
+            font-size: 16px;
+            border: 1px solid #ccc;
+            border-radius: 4px;
+        }
+
+        button {
+            padding: 10px 16px;
+            margin-left: 8px;
+            font-size: 16px;
+            background-color: #128C7E;
+            color: white;
+            border: none;
+            border-radius: 4px;
+            cursor: pointer;
+        }
+
+        button:hover {
+            background-color: #075E54;
+        }
+    </style>
+</head>
+<body>
+    <h2>Room: {{ room_name }}</h2>
+
+    <ul id="messages">
+        {% for msg in messages %}
+            <li class="message {% if msg.username == username %}me{% else %}other{% endif %}">
+                <strong>{{ msg.username }}</strong>: {{ msg.content }}
+            </li>
+        {% endfor %}
+    </ul>
+
+    <div class="input-container">
+        <input id="messageInput" type="text" placeholder="Type a message..." autocomplete="off">
+        <button onclick="sendMessage()">Send</button>
+    </div>
+
+    <script>
+        const roomName = "{{ room_name }}";
+        const username = "{{ username }}";
+
+        const chatSocket = new WebSocket(
+            'ws://' + window.location.host + '/ws/chat/' + roomName + '/'
+        );
+
+        chatSocket.onmessage = function(e) {
+            const data = JSON.parse(e.data);
+            const el = document.createElement('li');
+            el.classList.add('message');
+            if (data.username === username) {
+                el.classList.add('me');
+            } else {
+                el.classList.add('other');
+            }
+            el.innerHTML = `<strong>${data.username}</strong>: ${data.message}`;
+            document.getElementById('messages').appendChild(el);
+            el.scrollIntoView();
+        };
+
+        function sendMessage() {
+            const input = document.getElementById('messageInput');
+            const message = input.value.trim();
+            if (!message) return;
+
+            chatSocket.send(JSON.stringify({
+                'message': message,
+                'username': username
+            }));
+            input.value = '';
+        }
+    </script>
+</body>
+</html>

@@ -1,0 +1,19 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Social Community</title>
+    {% load static %}
+    <link rel="stylesheet" href="{% static 'social/style.css' %}">
+</head>
+<body>
+    <div class="navbar">
+        <h1>Social Community</h1>
+        <a href="{% url 'home' %}">Home</a>
+        <a href="/post">New Post</a>
+        <a href="/login">Login</a>
+    </div>
+    <div class="content">
+        {% block content %}{% endblock %}
+    </div>
+</body>
+</html>

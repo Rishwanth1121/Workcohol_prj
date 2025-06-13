@@ -1,0 +1,121 @@
+<style>
+    body {
+        background-image: url("{% static 'images/home_bg.jpg' %}");
+        background-size: cover;
+        background-repeat: no-repeat;
+        background-attachment: scroll;
+        background-position: center;
+        font-family: Arial, sans-serif;
+        margin: 0;
+        padding: 0;
+    }
+
+    /* Navbar Styles */
+    .navbar {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    background-color: #2f2f2f;
+    padding: 12px 30px;
+    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+    position: sticky;
+    top: 0;
+    z-index: 1000;
+}
+
+.nav-left a,
+.nav-right a {
+    margin-right: 15px;
+    padding: 8px 14px;
+    background-color: #2f80ed;
+    color: white;
+    text-decoration: none;
+    font-weight: 500;
+    border-radius: 6px;
+    transition: 0.3s ease;
+}
+
+.nav-left a:hover,
+.nav-right a:hover {
+    background-color: white;
+    color: #2f80ed;
+    border: 1px solid #2f80ed;
+}
+
+.nav-right span {
+    color: white;
+    margin-right: 10px;
+    font-weight: bold;
+}
+
+
+    /* Container for Centering */
+    .container {
+        display: flex;
+        min-height: 100vh;
+        justify-content: center;
+        align-items: center;
+        padding: 40px 0;
+    }
+
+    /* Login Card Styling */
+    .login-card {
+        background-color: rgba(255, 255, 255, 0.95);
+        padding: 40px;
+        border-radius: 16px;
+        box-shadow: 0 0 20px rgba(0, 0, 0, 0.2);
+        max-width: 400px;
+        width: 90%;
+        text-align: center;
+    }
+
+    h2 {
+        margin-bottom: 20px;
+        color: #333;
+    }
+
+    input[type="text"],
+    input[type="password"] {
+        width: 100%;
+        padding: 14px;
+        margin: 10px 0;
+        border: 1px solid #ccc;
+        border-radius: 10px;
+        font-size: 16px;
+    }
+
+    button {
+        width: 100%;
+        padding: 14px;
+        border: none;
+        background-color: #2f80ed;
+        color: white;
+        font-size: 16px;
+        border-radius: 10px;
+        cursor: pointer;
+        margin-top: 10px;
+        transition: background 0.3s ease, transform 0.2s ease;
+    }
+
+    button:hover {
+        background-color: #1c64c0;
+        transform: scale(1.02);
+    }
+
+    /* Social Media Icons */
+    .social-icons {
+        margin-top: 20px;
+    }
+
+    .social-icons img {
+        width: 32px;
+        margin: 0 10px;
+        opacity: 0.8;
+        transition: transform 0.2s ease, opacity 0.2s ease;
+    }
+
+    .social-icons img:hover {
+        transform: scale(1.1);
+        opacity: 1;
+    }
+</style>
