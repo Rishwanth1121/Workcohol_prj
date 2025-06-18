@@ -1,0 +1,28 @@
+{% extends 'base.html' %}
+{% block content %}
+<div style="max-width: 500px; margin: auto; padding: 2rem;">
+    <h2>Edit Profile</h2>
+    <form method="post" enctype="multipart/form-data">
+        {% csrf_token %}
+        <label>Role:</label><br>
+        <input type="text" name="role" value="{{ profile.role }}"><br><br>
+
+        <label>Facebook:</label><br>
+        <input type="url" name="facebook" value="{{ profile.facebook }}"><br><br>
+
+        <label>Twitter:</label><br>
+        <input type="url" name="twitter" value="{{ profile.twitter }}"><br><br>
+
+        <label>Instagram:</label><br>
+        <input type="url" name="instagram" value="{{ profile.instagram }}"><br><br>
+
+        <label>LinkedIn:</label><br>
+        <input type="url" name="linkedin" value="{{ profile.linkedin }}"><br><br>
+
+        <label>Profile Image:</label><br>
+        <input type="file" name="profile_image"><br><br>
+
+        <button type="submit">Save</button>
+    </form>
+</div>
+{% endblock %}

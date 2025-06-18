@@ -1,109 +1,236 @@
 {% load static %}
-
 <!DOCTYPE html>
 <html lang="en">
 <head>
     <meta charset="UTF-8">
-    <title>Login | Workcohol</title>
-    <link rel="stylesheet" href="{% static 'css/style.css' %}">
+    <title>Login | Get2gether</title>
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600&display=swap" rel="stylesheet">
     <style>
-        body {
-            background: url("{% static 'images/login_bg.jpg' %}") no-repeat center center fixed;
-            background-size: cover;
-            font-family: 'Inter', sans-serif;
+        /* [CSS same as before] */
+        * {
             margin: 0;
             padding: 0;
+            box-sizing: border-box;
         }
 
-        .container {
-            display: flex;
+        body {
+            font-family: 'Inter', sans-serif;
             height: 100vh;
+            display: flex;
+        }
+
+        .left-section {
+            flex: 1;
+            background-color: #fff;
+            display: flex;
             justify-content: center;
             align-items: center;
+            padding: 60px;
         }
 
-        .login-card {
-            background-color: rgba(255, 255, 255, 0.9);
-            padding: 40px;
-            border-radius: 16px;
-            box-shadow: 0 0 20px rgba(0, 0, 0, 0.2);
-            max-width: 400px;
+        .form-wrapper {
             width: 100%;
-            text-align: center;
+            max-width: 350px;
+            text-align: left;
         }
 
-        h2 {
-            margin-bottom: 20px;
+        .logo {
+            font-size: 24px;
+            font-weight: 600;
+            margin-bottom: 40px;
+            color: #3f3d56;
+        }
+
+        .form-wrapper h2 {
+            font-size: 32px;
+            margin-bottom: 10px;
+            color: #2f2e41;
+        }
+
+        .form-wrapper p {
+            font-size: 14px;
+            color: #666;
+            margin-bottom: 30px;
+        }
+
+        label {
+            font-size: 14px;
             color: #333;
         }
 
-        input[type="text"], input[type="password"] {
+        input[type="text"],
+        input[type="password"] {
             width: 100%;
-            padding: 14px;
-            margin: 10px 0;
+            padding: 12px;
+            margin: 8px 0 20px 0;
             border: 1px solid #ccc;
-            border-radius: 10px;
-            font-size: 16px;
+            border-radius: 8px;
+            font-size: 14px;
+        }
+
+        .form-actions {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 20px;
+            font-size: 14px;
+        }
+
+        .form-actions input[type="checkbox"] {
+            margin-right: 5px;
+        }
+
+        .form-actions a {
+            text-decoration: none;
+            color: #6c63ff;
         }
 
         button {
             width: 100%;
-            padding: 14px;
-            border: none;
-            background-color: #2f80ed;
+            padding: 12px;
+            background-color: #6c63ff;
             color: white;
+            border: none;
+            border-radius: 8px;
+            font-weight: 600;
             font-size: 16px;
-            border-radius: 10px;
             cursor: pointer;
-            margin-top: 10px;
-            transition: background 0.3s;
         }
 
         button:hover {
-            background-color: #1c64c0;
+            background-color: #574fd6;
+        }
+
+        .google-btn {
+            background: white;
+            color: #333;
+            border: 1px solid #ccc;
+            margin-top: 15px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+
+        .google-btn img {
+            width: 18px;
+            margin-right: 8px;
+        }
+
+        .footer-link {
+            margin-top: 20px;
+            font-size: 14px;
+            color: #555;
+            text-align: center;
+        }
+
+        .footer-link a {
+            color: #6c63ff;
+            text-decoration: none;
+            margin-left: 5px;
         }
 
         .social-icons {
-            margin-top: 20px;
+            margin-top: 15px;
+            display: flex;
+            justify-content: center;
+            gap: 15px;
         }
 
-        .social-icons img {
-            width: 32px;
-            margin: 0 10px;
-            opacity: 0.8;
-            transition: transform 0.2s;
+        .social-icons a img {
+            width: 24px;
+            height: 24px;
+            transition: transform 0.2s ease;
         }
 
-        .social-icons img:hover {
-            transform: scale(1.1);
-            opacity: 1;
+        .social-icons a:hover img {
+            transform: scale(1.2);
+        }
+
+        .right-section {
+            flex: 1;
+            background: #f5f5fc;
+            background-image: url("{% static 'social/images/login_illustration.png' %}");
+            background-size: cover;
+            background-position: center;
+        }
+
+        .error-message {
+            color: red;
+            font-size: 14px;
+            margin-bottom: 15px;
+        }
+
+        @media (max-width: 768px) {
+            body {
+                flex-direction: column;
+            }
+
+            .right-section {
+                height: 300px;
+            }
+
+            .left-section {
+                padding: 30px;
+            }
         }
     </style>
 </head>
 <body>
-    <div class="container">
-        <div class="login-card">
-            <h2>Login to Workcohol</h2>
+
+    <div class="left-section">
+        <div class="form-wrapper">
+            <div class="logo">GET 2 GETHER</div>
+            <h2>Welcome </h2>
+            <p>Please enter your details:</p>
+
+            {% if messages %}
+                {% for message in messages %}
+                    <div class="error-message">{{ message }}</div>
+                {% endfor %}
+            {% endif %}
+
             <form method="post">
                 {% csrf_token %}
-                <input type="text" name="username" placeholder="Username" required>
-                <input type="password" name="password" placeholder="Password" required>
-                <button type="submit">Login</button>
+                <label>Email address</label>
+                <input type="text" name="username" required>
+
+                <label>Password</label>
+                <input type="password" name="password" required>
+
+                <div class="form-actions">
+                    <label><input type="checkbox"> Remember for 30 days</label>
+                    <a href="#">Forgot password!</a>
+                </div>
+
+                <button type="submit">Sign in</button>
+
+                <button class="google-btn" type="button">
+                    <img src="{% static 'social/icons/google.png' %}" alt="Google Icon"> Sign in with Google
+                </button>
             </form>
 
-            <p style="margin-top: 15px;">Don't have an account?</p>
-            <a href="{% url 'register' %}">
-                <button style="background-color: #6c757d;">Register</button>
-            </a>
-
-
-            <div class="social-icons">
-                <a href="#"><img src="{% static 'icons/facebook.png' %}" alt="Facebook"></a>
-                <a href="#"><img src="{% static 'icons/twitter.png' %}" alt="Twitter"></a>
-                <a href="#"><img src="{% static 'icons/instagram.png' %}" alt="Instagram"></a>
+            <div class="footer-link">
+                Don’t have an account?
+                <a href="{% url 'register' %}">Sign up</a>
             </div>
+
+            <!-- Social Media Icons -->
+            <div class="social-icons">
+                <a href="https://instagram.com" target="_blank">
+                    <img src="{% static 'social/icons/instagram.png' %}" alt="Instagram">
+                </a>
+                <a href="https://facebook.com" target="_blank">
+                    <img src="{% static 'social/icons/facebook.png' %}" alt="Facebook">
+                </a>
+                <a href="https://twitter.com" target="_blank">
+                    <img src="{% static 'social/icons/twitter.png' %}" alt="Twitter">
+                </a>
+            </div>
+
         </div>
     </div>
+
+    <div class="right-section"></div>
+
 </body>
 </html>

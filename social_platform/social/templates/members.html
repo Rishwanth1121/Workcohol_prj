@@ -1,26 +1,77 @@
+{% extends 'base.html' %}
 {% load static %}
-<link rel="stylesheet" href="{% static 'css/style.css' %}">
+{% block content %}
+<style>
+.card-container {
+    display: flex;
+    justify-content: center;
+    flex-wrap: wrap;
+    gap: 2rem;
+    padding: 2rem;
+}
+.member-card {
+    background: #e0edf1;
+    border-radius: 12px;
+    padding: 25px 20px;
+    width: 260px;
+    text-align: center;
+    box-shadow: 0 6px 10px rgba(0,0,0,0.1);
+    transition: transform 0.3s;
+}
+.member-card:hover {
+    transform: translateY(-5px);
+}
+.member-card img {
+    width: 120px;
+    height: 120px;
+    border-radius: 50%;
+    object-fit: cover;
+    margin-bottom: 15px;
+    border: 3px solid white;
+}
+.member-card .role {
+    color: #777;
+    font-size: 0.85rem;
+    text-transform: uppercase;
+    margin-bottom: 8px;
+}
+.member-card h3 {
+    margin: 10px 0 5px;
+    font-size: 1.2rem;
+}
+.member-card p {
+    font-size: 0.9rem;
+    color: #555;
+    margin-bottom: 10px;
+}
+.social-icons a {
+    margin: 0 8px;
+    color: #333;
+    text-decoration: none;
+    font-size: 1.2rem;
+}
+</style>
 
-<div class="navbar">
-    <div class="nav-left">
-        <a href="{% url 'home' %}">Home</a>
-        <a href="{% url 'all_posts' %}">Posts</a>
-        <a href="{% url 'members' %}">Members</a>
-        <a href="{% url 'group_chat' %}">Group Chat</a>
+<div class="card-container">
+    {% for profile in profiles %}
+    <div class="member-card">
+        {% if profile.profile_image %}
+            <img src="{{ profile.profile_image.url }}" alt="{{ profile.user.username }}'s Profile Image">
+        {% else %}
+            <img src="{% static 'social/images/default-profile.png' %}" alt="Default Profile">
+        {% endif %}
+        <p class="role">{{ profile.role|default:"Member" }}</p>
+        <h3>
+            {{ profile.user.first_name|default:"" }} {{ profile.user.last_name|default:"" }}
+        </h3>
+        <p>Welcome to {{ profile.user.username|default:"Unknown User" }}'s page</p>
+        <div class="social-icons">
+            {% if profile.facebook %}<a href="{{ profile.facebook }}" target="_blank">🔵</a>{% endif %}
+            {% if profile.twitter %}<a href="{{ profile.twitter }}" target="_blank">🐦</a>{% endif %}
+            {% if profile.instagram %}<a href="{{ profile.instagram }}" target="_blank">📸</a>{% endif %}
+            {% if profile.linkedin %}<a href="{{ profile.linkedin }}" target="_blank">🔗</a>{% endif %}
+        </div>
     </div>
-    <div class="nav-right">
-        <span>{{ request.user.username }}</span>
-        <a href="{% url 'logout' %}">Logout</a>
-    </div>
+    {% endfor %}
 </div>
-
-<div class="container">
-    <div class="login-card">
-        <h2>Community Members</h2>
-        <ul>
-            {% for member in members %}
-                <li>{{ member.username }}</li>
-            {% endfor %}
-        </ul>
-    </div>
-</div>
+{% endblock %}

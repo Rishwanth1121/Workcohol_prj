@@ -1,0 +1,98 @@
+{% load static %}
+<!DOCTYPE html>
+<html>
+<head>
+    <title>My Profile</title>
+    <link rel="stylesheet" href="{% static 'social/style.css' %}">
+    <style>
+        body {
+            background-color: #f5e9f1;
+            font-family: 'Segoe UI', sans-serif;
+            margin: 0;
+            padding: 0;
+        }
+
+        .profile-container {
+            background: white;
+            margin: 50px auto;
+            max-width: 360px;
+            border-radius: 15px;
+            padding: 25px;
+            box-shadow: 0 10px 20px rgba(0,0,0,0.1);
+            text-align: center;
+        }
+
+        .profile-image {
+            width: 100px;
+            height: 100px;
+            border-radius: 50%;
+            object-fit: cover;
+            border: 3px solid #ccc;
+            margin-bottom: 10px;
+        }
+
+        .username {
+            font-size: 22px;
+            font-weight: 600;
+            margin-bottom: 5px;
+        }
+
+        .email {
+            font-size: 14px;
+            color: #777;
+            margin-bottom: 20px;
+        }
+
+        .profile-info {
+            text-align: left;
+            margin-top: 20px;
+        }
+
+        .info-item {
+            display: flex;
+            align-items: center;
+            margin: 12px 0;
+            font-size: 15px;
+        }
+
+        .info-item i {
+            width: 24px;
+            margin-right: 10px;
+            color: #555;
+        }
+
+        .edit-btn {
+            display: inline-block;
+            padding: 10px 20px;
+            background-color: #007bff;
+            color: white;
+            text-decoration: none;
+            border-radius: 25px;
+            margin-top: 20px;
+            font-weight: 500;
+        }
+    </style>
+</head>
+<body>
+    <div class="profile-container">
+        {% if profile.profile_image %}
+            <img src="{{ profile.profile_image.url }}" alt="Profile" class="profile-image">
+        {% else %}
+            <img src="{% static 'social/images/default-profile.png' %}" class="profile-image" alt="Default Profile">
+        {% endif %}
+
+        <div class="username">{{ user.username }}</div>
+        <div class="email">{{ user.email }}</div>
+
+        <div class="profile-info">
+            <div class="info-item"><i>👤</i> Role: {{ profile.role }}</div>
+            <div class="info-item"><i>🌐</i> Facebook: {{ profile.facebook|default:"Not Provided" }}</div>
+            <div class="info-item"><i>🐦</i> Twitter: {{ profile.twitter|default:"Not Provided" }}</div>
+            <div class="info-item"><i>📸</i> Instagram: {{ profile.instagram|default:"Not Provided" }}</div>
+            <div class="info-item"><i>💼</i> LinkedIn: {{ profile.linkedin|default:"Not Provided" }}</div>
+        </div>
+
+        <a class="edit-btn" href="{% url 'update_profile' %}">Edit Profile</a>
+    </div>
+</body>
+</html>

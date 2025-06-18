@@ -1,0 +1,134 @@
+{% extends 'base.html' %}
+{% load humanize %}
+{% load static %}
+
+{% block content %}
+<style>
+    body {
+        font-family: Inter, sans-serif;
+        background-color: #f5f5f5;
+        padding: 20px;
+    }
+
+    h1 {
+        margin-bottom: 20px;
+    }
+
+    .post-form,
+    .post,
+    .comment-box {
+        background: white;
+        padding: 20px;
+        margin-bottom: 20px;
+        border-radius: 12px;
+        box-shadow: 0 2px 6px rgba(0,0,0,0.05);
+    }
+
+    textarea,
+    input[type="file"] {
+        width: 100%;
+        margin-bottom: 10px;
+    }
+
+    .post img {
+        max-width: 100%;
+        margin-top: 10px;
+        border-radius: 8px;
+    }
+
+    .btn {
+        background: #6c63ff;
+        color: white;
+        padding: 8px 16px;
+        border: none;
+        border-radius: 6px;
+        cursor: pointer;
+        font-size: 14px;
+        width: auto;
+        display: inline-block;
+        text-align: center;
+        margin-right: 8px;
+    }
+
+    .btn:hover {
+        background: #5148e0;
+    }
+
+    .like-share {
+        margin-top: 10px;
+        display: flex;
+        gap: 10px;
+    }
+
+    .comments {
+        margin-top: 15px;
+    }
+
+    .comments h4 {
+        margin-bottom: 10px;
+    }
+
+    .comment-box textarea {
+        width: 100%;
+        padding: 8px;
+        border: 1px solid #ccc;
+        border-radius: 6px;
+    }
+</style>
+
+<h1>Community Posts</h1>
+
+<!-- Create Post -->
+<div class="post-form">
+    <form method="POST" enctype="multipart/form-data">
+        {% csrf_token %}
+        <textarea name="content" placeholder="What's on your mind?" rows="3" required></textarea><br>
+        <input type="file" name="image"><br><br>
+        <button class="btn" type="submit">Post</button>
+    </form>
+</div>
+
+<!-- List All Posts -->
+{% for post in posts %}
+    <div class="post" id="post{{ post.id }}">
+        <strong>{{ post.user.username }}</strong> <small>{{ post.created_at|naturaltime }}</small>
+        <p>{{ post.content }}</p>
+        {% if post.image %}
+            <img src="{{ post.image.url }}" alt="Post Image">
+        {% endif %}
+
+        <div class="like-share">
+            <form method="POST" action="{% url 'like_post' post.id %}#post{{ post.id }}">
+                {% csrf_token %}
+                <button class="btn" type="submit">
+                    {% if request.user in post.likes.all %}
+                        ❤️ Liked ({{ post.likes.count }})
+                    {% else %}
+                        🤍 Like ({{ post.likes.count }})
+                    {% endif %}
+                </button>
+            </form>
+
+            <button class="btn" onclick="navigator.clipboard.writeText(window.location.href + '#post{{ post.id }}')">🔗 Share</button>
+        </div>
+
+        <!-- Comments -->
+        <div class="comments">
+            <h4>Comments</h4>
+            {% for comment in post.comments.all %}
+                <p><strong>{{ comment.user.username }}</strong>: {{ comment.text }}</p>
+            {% empty %}
+                <p>No comments yet.</p>
+            {% endfor %}
+
+            <div class="comment-box">
+                <form method="POST" action="{% url 'comment_post' post.id %}#post{{ post.id }}">
+                    {% csrf_token %}
+                    <textarea name="comment" rows="2" placeholder="Write a comment..."></textarea><br>
+                    <button class="btn" type="submit">Comment</button>
+                </form>
+            </div>
+        </div>
+    </div>
+{% endfor %}
+{% endblock %}

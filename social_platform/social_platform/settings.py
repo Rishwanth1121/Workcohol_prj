@@ -1,4 +1,6 @@
 from pathlib import Path
+import os
+
 
 # Build paths inside the project like this: BASE_DIR / 'subdir'.
 BASE_DIR = Path(__file__).resolve().parent.parent
@@ -23,6 +25,7 @@ INSTALLED_APPS = [
     'social',  # 👈 Add your app here
     'channels',
     'chat',
+    'django.contrib.humanize',
 ]
 
 
@@ -47,6 +50,10 @@ CHANNEL_LAYERS = {
 }
 
 ROOT_URLCONF = 'social_platform.urls'
+
+MEDIA_URL = '/media/'
+MEDIA_ROOT = os.path.join(BASE_DIR, 'media')
+
 
 TEMPLATES = [
     {
@@ -97,6 +104,9 @@ USE_TZ = True
 
 # ✅ Static files (CSS, JavaScript, Images)
 STATIC_URL = '/static/'
+STATICFILES_DIRS = [ 
+    BASE_DIR / 'static' 
+    ]
 
 LOGIN_URL = '/login/'
 LOGIN_REDIRECT_URL = '/home/'
@@ -104,6 +114,7 @@ LOGOUT_REDIRECT_URL = '/login/'
 
 MEDIA_URL = '/media/'
 MEDIA_ROOT = BASE_DIR / 'media'
+MEDIA_ROOT = os.path.join(BASE_DIR, 'media')
 
 
 

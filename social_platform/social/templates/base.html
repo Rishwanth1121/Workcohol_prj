@@ -1,19 +1,144 @@
+{% load static %}
+{% load humanize %}
+{{ unread_notification_count }}
 <!DOCTYPE html>
 <html>
 <head>
     <title>Social Community</title>
-    {% load static %}
     <link rel="stylesheet" href="{% static 'social/style.css' %}">
+    <style>
+        .navbar {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 10px 20px;
+            background-color: #222;
+            color: white;
+        }
+
+        .navbar a {
+            color: white;
+            text-decoration: none;
+            margin: 0 10px;
+        }
+
+        .nav-links {
+            display: flex;
+            align-items: center;
+            position: relative;
+        }
+
+        .profile-dropdown {
+            position: relative;
+        }
+
+        .profile-icon {
+            height: 35px;
+            width: 35px;
+            border-radius: 50%;
+            object-fit: cover;
+            cursor: pointer;
+        }
+
+        .dropdown-menu {
+            display: none;
+            position: absolute;
+            top: 45px;
+            right: 0;
+            background-color: #444;
+            border-radius: 5px;
+            min-width: 160px;
+            z-index: 1000;
+        }
+
+        .dropdown-menu a {
+            color: white;
+            padding: 10px 15px;
+            display: block;
+            text-decoration: none;
+        }
+
+        .dropdown-menu a:hover {
+            background-color: #666;
+        }
+
+        .notification-icon {
+            position: relative;
+            margin-left: 20px;
+            cursor: pointer;
+            font-size: 18px;
+        }
+
+        .notification-badge {
+            position: absolute;
+            top: -6px;
+            right: -10px;
+            background-color: red;
+            color: white;
+            font-size: 11px;
+            padding: 2px 5px;
+            border-radius: 50%;
+        }
+    </style>
 </head>
 <body>
     <div class="navbar">
-        <h1>Social Community</h1>
-        <a href="{% url 'home' %}">Home</a>
-        <a href="/post">New Post</a>
-        <a href="/login">Login</a>
+        <h1 style="margin: 0;">Social Community</h1>
+        <div class="nav-links">
+            <a href="{% url 'home' %}">Home</a>
+            <a href="{% url 'all_posts' %}">Posts</a>
+            <a href="{% url 'members' %}">Members</a>
+
+            {% if user.is_authenticated %}
+                <a href="{% url 'notifications' %}" class="notification-icon">
+    <img src="{% static 'social/images/notification-bell.png' %}" alt="Notifications" height="24">
+    {% if unread_notification_count > 0 %}
+        <span class="notification-badge">
+            {% if unread_notification_count > 9 %}
+                9+
+            {% else %}
+                {{ unread_notification_count }}
+            {% endif %}
+        </span>
+    {% endif %}
+</a>
+
+                <div class="profile-dropdown">
+                    {% with profile=user.userprofile %}
+                        {% if profile.profile_image %}
+                            <img src="{{ profile.profile_image.url }}" alt="Profile" class="profile-icon" onclick="toggleDropdown()">
+                        {% else %}
+                            <img src="{% static 'social/images/default-profile.png' %}" alt="Profile" class="profile-icon" onclick="toggleDropdown()">
+                        {% endif %}
+                    {% endwith %}
+                    <div id="dropdownMenu" class="dropdown-menu">
+                        <a href="{% url 'profile' %}">Profile Details</a>
+                        <a href="{% url 'update_profile' %}">Update Profile</a>
+                        <a href="{% url 'logout' %}">Logout</a>
+                    </div>
+                </div>
+            {% else %}
+                <a href="{% url 'login' %}">Login</a>
+            {% endif %}
+        </div>
     </div>
-    <div class="content">
-        {% block content %}{% endblock %}
-    </div>
+
+    {% block content %}
+    {% endblock %}
+
+    <script>
+        function toggleDropdown() {
+            const menu = document.getElementById("dropdownMenu");
+            menu.style.display = (menu.style.display === "block") ? "none" : "block";
+        }
+
+        document.addEventListener("click", function(event) {
+            const dropdown = document.getElementById("dropdownMenu");
+            const icon = document.querySelector(".profile-icon");
+            if (dropdown && !icon.contains(event.target)) {
+                dropdown.style.display = "none";
+            }
+        });
+    </script>
 </body>
 </html>
