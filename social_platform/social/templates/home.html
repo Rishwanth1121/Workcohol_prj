@@ -206,14 +206,6 @@
         {% endfor %}
     </div>
 
-    <div class="sidebar">
-        <div class="card">
-            <h3>My Profile</h3>
-            <ul>
-                <li>👤 Username: {{ user.username }}</li>
-                <li>📬 Email: {{ user.email }}</li>
-            </ul>
-        </div>
 
         <div class="card search-box">
             <h3>Search Community</h3>
@@ -232,16 +224,6 @@
             </ul>
         </div>
 
-        <div class="card">
-    <h3>Notifications</h3>
-    <ul>
-        {% for note in user.notifications.all|dictsortreversed:"created_at"|slice:":5" %}
-            <li>🔔 {{ note.message }}</li>
-        {% empty %}
-            <li>No notifications yet.</li>
-        {% endfor %}
-    </ul>
-</div>
 
     </div>
 </section>

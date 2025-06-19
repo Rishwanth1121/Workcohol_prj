@@ -1,50 +1,50 @@
 {% extends 'base.html' %}
 {% load humanize %}
 {% block content %}
-<style>
-    .notifications-container {
-        max-width: 600px;
-        margin: 40px auto;
-        padding: 20px;
-        background-color: #fff;
-        border-radius: 12px;
-        box-shadow: 0 2px 6px rgba(0,0,0,0.1);
-        font-family: 'Inter', sans-serif;
-        color: #333;
-    }
+{% if messages %}
+  <ul>
+    {% for message in messages %}
+      <li style="color: green;">{{ message }}</li>
+    {% endfor %}
+  </ul>
+{% endif %}
 
-    .notifications-container h2 {
-        margin-bottom: 20px;
-    }
+<h2 style="margin-top: 20px;">Your Notifications</h2>
 
-    .notification {
-        border-bottom: 1px solid #eee;
-        padding: 12px 0;
-        font-size: 14px;
-    }
-
-    .notification:last-child {
-        border-bottom: none;
-    }
-
-    .notification time {
-        display: block;
-        color: #999;
-        font-size: 12px;
-    }
-</style>
-
-<div class="notifications-container">
-    <h2>Notifications</h2>
-    {% if notifications %}
-        {% for n in notifications %}
-            <div class="notification">
-                {{ n.message }}
-                <time>{{ n.created_at|naturaltime }}</time>
+{% if friend_requests %}
+    <h4 style="margin-top: 20px;">Friend Requests:</h4>
+    {% for request in friend_requests %}
+        <div style="background: #f0f0f0; padding: 15px; margin-bottom: 12px; border-radius: 8px; display: flex; justify-content: space-between; align-items: center;">
+            <div>
+                <strong>{{ request.from_user.username }}</strong> sent you a friend request.
             </div>
-        {% endfor %}
-    {% else %}
-        <p>No notifications yet.</p>
-    {% endif %}
-</div>
+            <div>
+                <form method="POST" action="{% url 'accept_friend_request' request.id %}" style="display:inline;">
+                    {% csrf_token %}
+                    <button class="btn" style="margin-right: 8px;">Accept</button>
+                </form>
+                <form method="POST" action="{% url 'reject_friend_request' request.id %}" style="display:inline;">
+                    {% csrf_token %}
+                    <button class="btn" style="background-color: #dc3545; color: white;">Reject</button>
+                </form>
+            </div>
+        </div>
+    {% endfor %}
+{% else %}
+    <p style="margin-top: 20px;">No new friend requests.</p>
+{% endif %}
+
+<hr style="margin: 30px 0;">
+
+{% if notifications %}
+    <h4>Activity Notifications:</h4>
+    {% for note in notifications %}
+        <div style="padding: 12px; margin-bottom: 12px; background: #e9ecef; border-radius: 6px;">
+            <div>{{ note.message }}</div>
+            <small style="color: gray;">{{ note.created_at|naturaltime }}</small>
+        </div>
+    {% endfor %}
+{% else %}
+    <p>No activity notifications.</p>
+{% endif %}
 {% endblock %}

@@ -1,0 +1,67 @@
+<div style="max-width: 600px; margin: 20px auto;">
+    <form action="{% url 'search_users' %}" method="GET" style="display: flex;">
+        <input type="text" name="q" value="{{ query }}" placeholder="Search users..." required
+               style="flex: 1; padding: 8px; border-radius: 6px 0 0 6px; border: 1px solid #ccc;">
+        <button type="submit"
+                style="padding: 8px 12px; background: #6c63ff; color: white; border: none; border-radius: 0 6px 6px 0; font-size: 16px;">
+            🔍
+        </button>
+    </form>
+</div>
+
+<h2 style="text-align: center;">Search Results for "{{ query }}"</h2>
+
+{% for user in users %}
+    <div style="background:#fff; padding:10px; margin:10px auto; border-radius:6px; max-width: 600px; text-align:center;">
+        <strong>{{ user.username }}</strong>
+        <div id="friend-section-{{ user.id }}" style="margin-top: 10px;">
+            {% if user.id in sent_requests %}
+                <button class="btn" onclick="cancelFriendRequest({{ user.id }})">Cancel Request</button>
+                <p style="color: green;">Friend request sent</p>
+            {% else %}
+                <button class="btn" onclick="sendFriendRequest({{ user.id }})">Add Friend</button>
+            {% endif %}
+        </div>
+    </div>
+{% empty %}
+    <p style="text-align: center; margin-top: 30px;">No users found.</p>
+{% endfor %}
+
+<script>
+function sendFriendRequest(userId) {
+    fetch("{% url 'ajax_add_friend' %}", {
+        method: 'POST',
+        headers: {
+            'Content-Type': 'application/json',
+            'X-CSRFToken': '{{ csrf_token }}'
+        },
+        body: JSON.stringify({ user_id: userId })
+    }).then(response => response.json())
+      .then(data => {
+        if (data.success) {
+            const section = document.getElementById(`friend-section-${userId}`);
+            section.innerHTML = `
+                <button class="btn" onclick="cancelFriendRequest(${userId})">Cancel Request</button>
+                <p style="color: green;">Friend request sent</p>`;
+        }
+    });
+}
+
+function cancelFriendRequest(userId) {
+    fetch("{% url 'ajax_cancel_friend' %}", {
+        method: 'POST',
+        headers: {
+            'Content-Type': 'application/json',
+            'X-CSRFToken': '{{ csrf_token }}'
+        },
+        body: JSON.stringify({ user_id: userId })
+    }).then(response => response.json())
+      .then(data => {
+        if (data.success) {
+            const section = document.getElementById(`friend-section-${userId}`);
+            section.innerHTML = `
+                <button class="btn" onclick="sendFriendRequest(${userId})">Add Friend</button>`;
+        }
+    });
+}
+</script>

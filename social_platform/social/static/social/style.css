@@ -12,42 +12,41 @@
 
     /* Navbar Styles */
     .navbar {
-    display: flex;
-    justify-content: space-between;
-    align-items: center;
-    background-color: #2f2f2f;
-    padding: 12px 30px;
-    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
-    position: sticky;
-    top: 0;
-    z-index: 1000;
-}
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        background-color: #2f2f2f;
+        padding: 12px 30px;
+        box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+        position: sticky;
+        top: 0;
+        z-index: 1000;
+    }
 
-.nav-left a,
-.nav-right a {
-    margin-right: 15px;
-    padding: 8px 14px;
-    background-color: #2f80ed;
-    color: white;
-    text-decoration: none;
-    font-weight: 500;
-    border-radius: 6px;
-    transition: 0.3s ease;
-}
+    .nav-left a,
+    .nav-right a {
+        margin-right: 15px;
+        padding: 8px 14px;
+        background-color: #2f80ed;
+        color: white;
+        text-decoration: none;
+        font-weight: 500;
+        border-radius: 6px;
+        transition: 0.3s ease;
+    }
 
-.nav-left a:hover,
-.nav-right a:hover {
-    background-color: white;
-    color: #2f80ed;
-    border: 1px solid #2f80ed;
-}
+    .nav-left a:hover,
+    .nav-right a:hover {
+        background-color: white;
+        color: #2f80ed;
+        border: 1px solid #2f80ed;
+    }
 
-.nav-right span {
-    color: white;
-    margin-right: 10px;
-    font-weight: bold;
-}
-
+    .nav-right span {
+        color: white;
+        margin-right: 10px;
+        font-weight: bold;
+    }
 
     /* Container for Centering */
     .container {
@@ -100,6 +99,72 @@
     button:hover {
         background-color: #1c64c0;
         transform: scale(1.02);
+    }
+
+    /* Post-specific Button Styles */
+    .btn {
+        background-color: #2f80ed;
+        color: white;
+        padding: 8px 16px;
+        margin: 6px 6px 6px 0;
+        border: none;
+        border-radius: 8px;
+        font-size: 14px;
+        cursor: pointer;
+        transition: background-color 0.3s ease;
+    }
+
+    .btn:hover {
+        background-color: #1c64c0;
+    }
+
+    /* Post and Comment Sections */
+    .post-form {
+        background-color: rgba(255, 255, 255, 0.95);
+        padding: 20px;
+        border-radius: 12px;
+        margin: 20px auto;
+        max-width: 600px;
+        box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+    }
+
+    .post {
+        background-color: rgba(255, 255, 255, 0.95);
+        padding: 20px;
+        border-radius: 12px;
+        margin: 20px auto;
+        max-width: 600px;
+        box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+    }
+
+    .post img {
+        max-width: 100%;
+        border-radius: 8px;
+        margin-top: 10px;
+    }
+
+    .like-share {
+        display: flex;
+        gap: 10px;
+        margin-top: 10px;
+    }
+
+    .comments {
+        margin-top: 15px;
+        border-top: 1px solid #ccc;
+        padding-top: 10px;
+    }
+
+    .comment-box textarea {
+        width: 100%;
+        padding: 10px;
+        border-radius: 6px;
+        border: 1px solid #ccc;
+        resize: vertical;
+    }
+
+    .comment-box .btn {
+        margin-top: 5px;
     }
 
     /* Social Media Icons */

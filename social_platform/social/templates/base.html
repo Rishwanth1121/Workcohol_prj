@@ -1,6 +1,5 @@
 {% load static %}
 {% load humanize %}
-{{ unread_notification_count }}
 <!DOCTYPE html>
 <html>
 <head>
@@ -79,6 +78,69 @@
             padding: 2px 5px;
             border-radius: 50%;
         }
+
+        .search-form {
+        position: relative;
+        margin-left: 15px;
+    }
+
+    .search-form input[type="text"] {
+        width: 160px; /* reduced width */
+        padding: 8px 32px 8px 10px; /* space for icon */
+        border-radius: 6px;
+        border: 1px solid #ccc;
+        font-size: 14px;
+    }
+
+    .search-form button {
+        position: absolute;
+        top: 50%;
+        right: 8px;
+        transform: translateY(-50%);
+        background: none;
+        border: none;
+        cursor: pointer;
+        font-size: 14px;
+        color: #555;
+    }
+
+    .search-form button:hover {
+        color: white;
+    }
+
+    .search-wrapper {
+    display: flex;
+    align-items: center;
+    gap: 6px;
+    margin-left: 15px;
+}
+
+.search-wrapper input[type="text"] {
+    padding: 6px 10px;
+    border-radius: 6px;
+    border: 1px solid #ccc;
+    font-size: 14px;
+    width: 180px;
+}
+
+.search-wrapper .search-btn {
+    background: none;
+    border: none;
+    cursor: pointer;
+    padding: 0;
+}
+
+.search-wrapper .search-btn img {
+    height: 18px;
+    width: 18px;
+    opacity: 0.7;
+    transition: opacity 0.2s ease;
+}
+
+.search-wrapper .search-btn img:hover {
+    opacity: 1;
+}
+
     </style>
 </head>
 <body>
@@ -88,20 +150,18 @@
             <a href="{% url 'home' %}">Home</a>
             <a href="{% url 'all_posts' %}">Posts</a>
             <a href="{% url 'members' %}">Members</a>
+            <a href="{% url 'group_chat' %}">Group Chat</a>
+            <!-- Inside .nav-links -->
+            <a href="{% url 'search_page' %}" class="search-icon" title="Search Users" style="margin-left: 15px; font-size: 18px;">🔍</a>
 
             {% if user.is_authenticated %}
                 <a href="{% url 'notifications' %}" class="notification-icon">
-    <img src="{% static 'social/images/notification-bell.png' %}" alt="Notifications" height="24">
-    {% if unread_notification_count > 0 %}
-        <span class="notification-badge">
-            {% if unread_notification_count > 9 %}
-                9+
-            {% else %}
-                {{ unread_notification_count }}
-            {% endif %}
-        </span>
-    {% endif %}
-</a>
+                    <img src="{% static 'social/images/notification-bell.png' %}" alt="Notifications" height="24">
+                    {% if unread_notification_count > 0 %}
+  <span class="badge">{{ unread_notification_count }}</span>
+{% endif %}
+
+                </a>
 
                 <div class="profile-dropdown">
                     {% with profile=user.userprofile %}
@@ -114,6 +174,7 @@
                     <div id="dropdownMenu" class="dropdown-menu">
                         <a href="{% url 'profile' %}">Profile Details</a>
                         <a href="{% url 'update_profile' %}">Update Profile</a>
+                        <a href="{% url 'my_posts' %}">My Posts</a>
                         <a href="{% url 'logout' %}">Logout</a>
                     </div>
                 </div>

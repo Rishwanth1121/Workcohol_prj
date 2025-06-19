@@ -1,7 +1,5 @@
 {% extends 'base.html' %}
 {% load humanize %}
-{% load static %}
-
 {% block content %}
 <style>
     body {
@@ -76,29 +74,23 @@
     }
 </style>
 
-<h1>Community Posts</h1>
+<h1 style="text-align: center; margin-top: 20px;">My Posts</h1>
 
-<!-- Create Post -->
-<div class="post-form">
-    <form method="POST" enctype="multipart/form-data">
-        {% csrf_token %}
-        <textarea name="content" placeholder="What's on your mind?" rows="3" required></textarea><br>
-        <input type="file" name="image"><br><br>
-        <button class="btn" type="submit">Post</button>
-    </form>
-</div>
-
-<!-- List All Posts -->
 {% for post in posts %}
     <div class="post" id="post{{ post.id }}">
-        <strong>{{ post.user.username }}</strong> <small>{{ post.created_at|naturaltime }}</small>
+        <div style="margin-bottom: 10px;">
+            <strong>{{ post.user.username }}</strong>
+            <small style="color: gray; margin-left: 10px;">{{ post.created_at|naturaltime }}</small>
+        </div>
         <p>{{ post.content }}</p>
+
         {% if post.image %}
-            <img src="{{ post.image.url }}" alt="Post Image">
+            <img src="{{ post.image.url }}" alt="Post Image" style="max-width:100%; border-radius:10px; margin-top:10px;">
         {% endif %}
 
         <div class="like-share">
-            <form method="POST" action="{% url 'like_post' post.id %}">
+            <!-- Like Button -->
+            <form method="POST" action="{% url 'like_post' post.id %}#post{{ post.id }}">
                 {% csrf_token %}
                 <button class="btn" type="submit">
                     {% if request.user in post.likes.all %}
@@ -109,10 +101,17 @@
                 </button>
             </form>
 
-            <button class="btn" onclick="navigator.clipboard.writeText(window.location.href + '#post{{ post.id }}')">🔗 Share</button>
+            <!-- Share Button -->
+            <button class="btn" onclick="navigator.clipboard.writeText(window.location.href.split('#')[0] + '#post{{ post.id }}')">🔗 Share</button>
+
+            <!-- Delete Button -->
+            <form method="POST" action="{% url 'delete_post' post.id %}#post{{ post.id }}" style="display:inline;">
+                {% csrf_token %}
+                <button class="btn btn-delete" type="submit">🗑 Delete</button>
+            </form>
         </div>
 
-        <!-- Comments -->
+        <!-- Comments Section -->
         <div class="comments">
             <h4>Comments</h4>
             {% for comment in post.comments.all %}
@@ -121,8 +120,9 @@
                 <p>No comments yet.</p>
             {% endfor %}
 
+            <!-- Add Comment -->
             <div class="comment-box">
-                <form method="POST" action="{% url 'comment_post' post.id %}">
+                <form method="POST" action="{% url 'comment_post' post.id %}#post{{ post.id }}">
                     {% csrf_token %}
                     <textarea name="comment" rows="2" placeholder="Write a comment..."></textarea><br>
                     <button class="btn" type="submit">Comment</button>
@@ -130,5 +130,20 @@
             </div>
         </div>
     </div>
+{% empty %}
+    <p style="text-align: center; margin-top: 40px;">You haven’t posted anything yet.</p>
 {% endfor %}
+
+<!-- Smooth scroll to anchor on page load -->
+<script>
+    window.addEventListener('load', function () {
+        if (window.location.hash) {
+            const target = document.querySelector(window.location.hash);
+            if (target) {
+                target.scrollIntoView({ behavior: 'smooth' });
+            }
+        }
+    });
+</script>
+
 {% endblock %}

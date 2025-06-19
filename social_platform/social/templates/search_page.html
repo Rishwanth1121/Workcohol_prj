@@ -1,0 +1,51 @@
+{% extends 'base.html' %}
+{% block content %}
+<style>
+    .search-page-container {
+        max-width: 500px;
+        margin: 50px auto;
+        padding: 20px;
+        background: white;
+        border-radius: 10px;
+        box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+        text-align: center;
+    }
+
+    .search-form {
+        position: relative;
+        margin-top: 10px;
+    }
+
+    .search-form input[type="text"] {
+        width: 100%;
+        padding: 10px 40px 10px 12px;
+        border-radius: 8px;
+        border: 1px solid #ccc;
+        font-size: 16px;
+    }
+
+    .search-form button {
+        position: absolute;
+        top: 50%;
+        right: 10px;
+        transform: translateY(-50%);
+        background: none;
+        border: none;
+        font-size: 18px;
+        cursor: pointer;
+        color: #888;
+    }
+
+    .search-form button:hover {
+        color: #333;
+    }
+</style>
+
+<div class="search-page-container">
+    <h2>Find Friends</h2>
+    <form action="{% url 'search_users' %}" method="GET" class="search-form">
+        <input type="text" name="q" placeholder="Search by username..." required>
+        <button type="submit">🔍</button>
+    </form>
+</div>
+{% endblock %}
